@@ -1,6 +1,8 @@
+
 import TaskItem from "@/components/task";
 import { colors } from "@/constants/color";
-import { Alert, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import logo from "../assets/images/icon.png";
 
 export type Task = {
@@ -8,12 +10,22 @@ export type Task = {
   completed: boolean;
   text: string;
 };
-export default function RootLayout() {
-  const tasks: Task[] = [
+
+  const InitialTasks: Task[] = [
     { id: 1, completed: false, text: "Estudar JavaScript" },
     { id: 2, completed: true, text: "Iniciar projeto com Expo" },
     { id: 3, completed: false, text: "Criar tela de login" }
   ];
+
+export default function RootLayout() {
+  const [tasks, setTasks] = useState<Task[]>(InitialTasks)
+  const [text, setText] = useState<string>("")
+
+  const addTask = () => {
+    const newTask = {id: tasks.length + 1 , completed: false , text}
+    setTasks([...tasks, newTask])
+    setText("")
+  }
 
   return (
     <View style={style.mainContainer}>
@@ -23,9 +35,9 @@ export default function RootLayout() {
       </View>
 
       <View style={style.rowContainer}>
-        <TextInput style={style.input} />
+        <TextInput style={style.input} value={text} onChangeText={setText} />
         <Pressable
-          onPress={() => Alert.alert("Oi")}
+          onPress={addTask}
           style={({ pressed }) => [
             style.button,
             { backgroundColor: pressed ? "blue" : colors.primary }
@@ -39,7 +51,7 @@ export default function RootLayout() {
         data={tasks}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-           <TaskItem text={item.text} />
+           <TaskItem id={item.id} text={item.text} completed={item.completed} key={item.id}   />
         )}
       />
     </View>
