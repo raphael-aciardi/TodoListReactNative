@@ -26,7 +26,7 @@ export default function RootLayout() {
     setTasks([...tasks, newTask])
     setText("")
   }
-
+  
   return (
     <View style={style.mainContainer}>
       <View style={style.rowContainer}>
@@ -35,7 +35,7 @@ export default function RootLayout() {
       </View>
 
       <View style={style.rowContainer}>
-        <TextInput style={style.input} value={text} onChangeText={setText} />
+        <TextInput style={style.input} value={text} onChangeText={setText} onSubmitEditing={addTask} />
         <Pressable
           onPress={addTask}
           style={({ pressed }) => [
